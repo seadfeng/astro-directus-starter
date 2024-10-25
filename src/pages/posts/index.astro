@@ -3,10 +3,11 @@ import Posts from "@layouts/Posts.astro";
 import getPagination from "@utils/getPagination";
 import getTotalCount from "@utils/getTotalCount";
 
-import { readItems } from "@directus/sdk";
-import directus, { type PostStatus } from "lib/directus";
 import { SITE } from "@config";
+import { readItems } from "@directus/sdk";
 import { layoutProps } from "@utils/getConfig";
+import directus, { type PostStatus } from "lib/directus";
+export const runtime = "edge";
 
 const collection = await directus.request(
   readItems("posts", {

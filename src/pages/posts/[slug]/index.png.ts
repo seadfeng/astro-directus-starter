@@ -2,6 +2,7 @@ import { SITE } from "@config";
 import { readItems } from "@directus/sdk";
 import type { APIRoute } from "astro";
 import directus, { type Posts } from "lib/directus";
+export const runtime = "edge";
 
 export const GET: APIRoute = async ({ params }) => {
   const { slug } = params as { slug: string };

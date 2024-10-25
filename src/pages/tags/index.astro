@@ -1,16 +1,17 @@
 ---
-import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
-import Layout from "@layouts/Layout.astro";
-import Main from "@layouts/Main.astro";
+import Header from "@components/Header.astro";
+import Pagination from "@components/Pagination.astro";
 import Tag from "@components/Tag.astro";
 import { SITE } from "@config";
-import directus, { type Config } from "lib/directus";
 import { readItems } from "@directus/sdk";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import { layoutProps } from "@utils/getConfig";
 import getPagination from "@utils/getPagination";
 import getTotalCount from "@utils/getTotalCount";
-import Pagination from "@components/Pagination.astro";
-import { layoutProps } from "@utils/getConfig";
+import directus, { type Config } from "lib/directus";
+export const runtime = "edge";
 
 const tags = await directus.request(
   readItems("tags", {

@@ -1,7 +1,8 @@
+import { SITE } from "@config";
+import { readItems } from "@directus/sdk";
 import type { APIRoute } from "astro";
 import directus, { type PostStatus } from "lib/directus";
-import { readItems } from "@directus/sdk";
-import { SITE } from "@config";
+export const runtime = "edge";
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);

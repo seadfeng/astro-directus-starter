@@ -1,6 +1,7 @@
-import type { APIRoute } from "astro";
 import { SITE } from "@config";
 import getTotalCount from "@utils/getTotalCount";
+import type { APIRoute } from "astro";
+export const runtime = "edge";
 
 export const GET: APIRoute = async () => {
   const totalPosts = await getTotalCount("posts");

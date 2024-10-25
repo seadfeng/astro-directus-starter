@@ -12,11 +12,13 @@ import { layoutProps } from "@utils/getConfig";
 import getPagination from "@utils/getPagination";
 import getTotalCount from "@utils/getTotalCount";
 import directus, {
+  type Config,
   type Posts,
   type PostStatus,
   type Tags,
-  type Config,
 } from "lib/directus";
+export const runtime = "edge";
+
 const { tag } = Astro.params as { tag: string };
 const tagName = tag;
 let tags: Tags[] = [];

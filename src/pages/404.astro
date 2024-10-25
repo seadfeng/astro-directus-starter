@@ -5,6 +5,7 @@ import LinkButton from "@components/LinkButton.astro";
 import Layout from "@layouts/Layout.astro";
 import { layoutProps } from "@utils/getConfig";
 import { type Config } from "lib/directus";
+export const runtime = "edge";
 const config = await layoutProps();
 ---
 

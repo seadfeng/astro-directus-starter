@@ -4,6 +4,7 @@ import { aggregate, readItems } from "@directus/sdk";
 import TagPosts from "@layouts/TagPosts.astro";
 import getPagination from "@utils/getPagination";
 import directus, { type Posts, type PostStatus } from "lib/directus";
+export const runtime = "edge";
 
 const { tag, page } = Astro.params as { tag: string; page: string };
 

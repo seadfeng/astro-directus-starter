@@ -12,6 +12,8 @@ import Layout from "@layouts/Layout.astro";
 import { layoutProps } from "@utils/getConfig";
 import { getSocialObjects } from "@utils/getSocial";
 import directus, { type Config, type PostStatus } from "lib/directus";
+export const runtime = "edge";
+
 const featuredPosts = await directus.request(
   readItems("posts", {
     limit: SITE.postPerPage,

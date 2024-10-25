@@ -1,7 +1,8 @@
 import rss from "@astrojs/rss";
-import directus, { type PostStatus } from "lib/directus";
 import { readItems } from "@directus/sdk";
 import { siteConfig } from "@utils/getConfig";
+import directus, { type PostStatus } from "lib/directus";
+export const runtime = "edge";
 
 export async function GET() {
   const config = await siteConfig();

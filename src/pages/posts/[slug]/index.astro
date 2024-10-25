@@ -1,17 +1,19 @@
 ---
-import Posts from "@layouts/Posts.astro";
+import { SITE } from "@config";
+import { readItems } from "@directus/sdk";
 import PostDetails from "@layouts/PostDetails.astro";
+import Posts from "@layouts/Posts.astro";
+import { layoutProps } from "@utils/getConfig";
 import getPagination from "@utils/getPagination";
+import getTotalCount from "@utils/getTotalCount";
 import directus, {
   type Posts as Post,
-  type Tags,
   type PostDetail,
   type PostStatus,
+  type Tags,
 } from "lib/directus";
-import { readItems } from "@directus/sdk";
-import getTotalCount from "@utils/getTotalCount";
-import { SITE } from "@config";
-import { layoutProps } from "@utils/getConfig";
+export const runtime = "edge";
+
 const { slug } = Astro.params;
 if (!slug) return;
 let collection: Post[] = [];
