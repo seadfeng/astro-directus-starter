@@ -1,5 +1,5 @@
 {
-  "name": "astro-directus-starter.com",
+  "name": "astro-directus-starter",
   "version": "4.4.0",
   "scripts": {
     "start:frontend": "astro dev",
