@@ -30,10 +30,20 @@ Regenerate Token for Workers & Pages Variables and Secrets `VITE_DIRECTUS_ADMIN_
 
 #### Actions secrets and variables
 
+**variables**
+
+- VITE_ASTRO_URL
+- VITE_ASTRO_AUTHOR
+- VITE_ASTRO_PROFILE
+- VITE_DIRECTUS_URL
+
+![Repository variables](public/assets/repository-variables.png)
+
 **secrets**
 
 - CLOUDFLARE_ACCOUNT_ID
 - CLOUDFLARE_API_TOKEN
+- VITE_DIRECTUS_ADMIN_TOKEN
 
 ![Repository Secrets](public/assets/repository-secrets.png)
 
