@@ -1,6 +1,6 @@
 # AstroPaper With Directus
 
-Base on [AstroPaper](https://github.com/satnaing/astro-paper) 
+Base on [AstroPaper](https://github.com/satnaing/astro-paper)
 
 ## Dev
 
@@ -17,8 +17,6 @@ pnpm develop
 
 ```
 
-
 ## 部署
 
-[backend/.env](backend/.env) 
- 
+[backend/.env](backend/.env)

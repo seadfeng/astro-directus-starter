@@ -5,47 +5,55 @@ import Main from "@layouts/Main.astro";
 import he from "he";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
-import SearchBar from "@components/Search"; 
+import SearchBar from "@components/Search";
 import { readItems } from "@directus/sdk";
-import directus, { type Posts, type PostStatus, type Config } from "lib/directus";
+import directus, {
+  type Posts,
+  type PostStatus,
+  type Config,
+} from "lib/directus";
 import { stripHtmlTags } from "@utils/htmlUtils";
 import { layoutProps } from "@utils/getConfig";
 
 const { url } = Astro;
-const query = url.searchParams.get('q');
+const query = url.searchParams.get("q");
 
 let posts: Posts[] = [];
 
-if(query && query?.length > 1){
+if (query && query?.length > 1) {
   posts = await directus.request(
     readItems("posts", {
       limit: SITE.postPerPage,
-      filter: { 
+      filter: {
         title: { _icontains: query },
-        status: { _eq: "published" as PostStatus }
+        status: { _eq: "published" as PostStatus },
       },
       sort: ["-date_published"],
     })
-  ); 
+  );
 }
 
 // List of items to search in
-const searchList = posts.map((post) =>{ 
-  const decodedContent = he.decode(post.content); 
-  let description = stripHtmlTags(decodedContent).slice(0, SITE.postTruncateLength);
-  if(description.length >= SITE.postTruncateLength) description += "...";
+const searchList = posts.map(post => {
+  const decodedContent = he.decode(post.content);
+  let description = stripHtmlTags(decodedContent).slice(
+    0,
+    SITE.postTruncateLength
+  );
+  if (description.length >= SITE.postTruncateLength) description += "...";
   return {
     title: post.title,
     description,
     data: post,
     slug: post.slug,
-}});
+  };
+});
 
 const config = await layoutProps();
 ---
 
 <Layout {...config} title={`Search | ${config.site_name}`}>
-  <Header activeNav="search" siteConfig={config.site_config as Config}/>
+  <Header activeNav="search" siteConfig={config.site_config as Config} />
   <Main pageTitle="Search" pageDesc="Search any article ...">
     <SearchBar client:load initialSearchList={searchList} />
   </Main>

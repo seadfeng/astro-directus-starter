@@ -1,24 +1,24 @@
---- 
+---
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import LinkButton from "@components/LinkButton.astro";
 import Hr from "@components/Hr.astro";
 import Card from "@components/Card";
-import Socials from "@components/Socials.astro"; 
+import Socials from "@components/Socials.astro";
 import { SITE } from "@config";
 import { CheckLink } from "@components/CheckLink";
-import  { type PostStatus, type Config } from "lib/directus";
+import { type PostStatus, type Config } from "lib/directus";
 import { readItems } from "@directus/sdk";
-import directus from "lib/directus"; 
+import directus from "lib/directus";
 import { layoutProps } from "@utils/getConfig";
-import { getSocialObjects } from "@utils/getSocial"; 
+import { getSocialObjects } from "@utils/getSocial";
 const featuredPosts = await directus.request(
   readItems("posts", {
     limit: SITE.postPerPage,
     filter: {
       featured: { _eq: true },
-      status: { _eq: "published" as PostStatus }
+      status: { _eq: "published" as PostStatus },
     },
     sort: ["-date_published"],
   })
@@ -26,17 +26,19 @@ const featuredPosts = await directus.request(
 const recentPosts = await directus.request(
   readItems("posts", {
     limit: SITE.postPerPage,
-    filter: { 
-      status: { _eq: "published" as PostStatus }
+    filter: {
+      status: { _eq: "published" as PostStatus },
     },
-    sort: ["-date_published"]
+    sort: ["-date_published"],
   })
 );
 
 const config = await layoutProps();
-const socialObjects = getSocialObjects({profile: config.profile, site_name: config.site_name});
-const socialCount = socialObjects.length; 
-
+const socialObjects = getSocialObjects({
+  profile: config.profile,
+  site_name: config.site_name,
+});
+const socialCount = socialObjects.length;
 ---
 
 <Layout {...config}>
@@ -80,7 +82,7 @@ const socialCount = socialObjects.length;
           <section id="featured">
             <h2>Featured</h2>
             <ul>
-              {featuredPosts.map((post) => (
+              {featuredPosts.map(post => (
                 <Card
                   href={`/posts/${post.slug}/`}
                   frontmatter={post}

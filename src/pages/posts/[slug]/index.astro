@@ -1,83 +1,90 @@
 ---
 import Posts from "@layouts/Posts.astro";
-import PostDetails from "@layouts/PostDetails.astro"; 
-import getPagination from "@utils/getPagination"; 
-import directus, { type Posts as Post, type Tags, type PostDetail, type PostStatus } from "lib/directus";
+import PostDetails from "@layouts/PostDetails.astro";
+import getPagination from "@utils/getPagination";
+import directus, {
+  type Posts as Post,
+  type Tags,
+  type PostDetail,
+  type PostStatus,
+} from "lib/directus";
 import { readItems } from "@directus/sdk";
 import getTotalCount from "@utils/getTotalCount";
-import { SITE } from "@config";   
+import { SITE } from "@config";
 import { layoutProps } from "@utils/getConfig";
-const { slug } = Astro.params;   
-if(!slug) return;
+const { slug } = Astro.params;
+if (!slug) return;
 let collection: Post[] = [];
 let post: PostDetail | null = null;
-let tags: string[] = []; 
+let tags: string[] = [];
 // slug 是数字
-if(!isNaN(Number(slug))){
+if (!isNaN(Number(slug))) {
   collection = await directus.request(
-  readItems("posts", {
-    limit: SITE.postPerPage, 
-    filter: {
-      status: { _eq: "published" as PostStatus }
-    },
-    page: parseInt(slug, 10),
-    sort: ["-date_published"],
-  }))
-}else{
+    readItems("posts", {
+      limit: SITE.postPerPage,
+      filter: {
+        status: { _eq: "published" as PostStatus },
+      },
+      page: parseInt(slug, 10),
+      sort: ["-date_published"],
+    })
+  );
+} else {
   collection = await directus.request(
-    readItems("posts", { 
-      fields:[
+    readItems("posts", {
+      fields: [
         "*",
         {
-          "user_created": [
+          user_created: [
             "id",
             "status",
             "policies",
             "provider",
             "last_name",
             "first_name",
-            "avatar"
-          ]
-        } 
+            "avatar",
+          ],
+        },
       ],
       filter: {
         slug: { _eq: slug },
-        status: { _eq: "published" as PostStatus }
+        status: { _eq: "published" as PostStatus },
       },
-      limit: 1
+      limit: 1,
     })
   );
-  if(collection.length === 0) return;
-  post = {...collection[0], tags: []};  
-  if(post.tag_ids.length > 0){
-    const posts_tags:{
-      tags_id: Tags
-    }[] = await directus.request(
+  if (collection.length === 0) return;
+  post = { ...collection[0], tags: [] };
+  if (post.tag_ids.length > 0) {
+    const posts_tags: {
+      tags_id: Tags;
+    }[] = (await directus.request(
       readItems("posts_tags", {
-        fields: [ 
+        fields: [
           // @ts-expect-error: Suppressing type error for demonstration purposes
-          "tags_id.name" 
-        ] ,
+          "tags_id.name",
+        ],
         filter: {
-          id: { _in: post.tag_ids as any[] }
-        }
-    })) as any[];
-    tags = posts_tags.map(posts_tag => posts_tag.tags_id.name); 
+          id: { _in: post.tag_ids as any[] },
+        },
+      })
+    )) as any[];
+    tags = posts_tags.map(posts_tag => posts_tag.tags_id.name);
   }
-  
+
   // posts.id => posts_tags.posts_id & posts_tags.tags_id <= tags.id
 }
 
 let pagination = {
   totalPages: 0,
-  currentPage: 1
-}
-if(post){
+  currentPage: 1,
+};
+if (post) {
   post = {
     ...post,
-    tags
-  } 
-}else{
+    tags,
+  };
+} else {
   const totalCount = await getTotalCount("posts");
   pagination = getPagination({
     totalCount,
@@ -87,4 +94,10 @@ if(post){
 const config = await layoutProps();
 ---
 
-{post ? <PostDetails post={post} /> : <Posts layoutProps={config} {...pagination} collection={collection} />}
+{
+  post ? (
+    <PostDetails post={post} />
+  ) : (
+    <Posts layoutProps={config} {...pagination} collection={collection} />
+  )
+}

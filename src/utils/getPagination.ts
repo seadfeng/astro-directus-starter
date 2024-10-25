@@ -1,4 +1,4 @@
- import getPageNumbers from "./getPageNumbers";
+import getPageNumbers from "./getPageNumbers";
 
 interface GetPaginationProps {
   totalCount: number;
@@ -18,11 +18,11 @@ const getPagination = ({
     ? 1
     : page && !isNaN(Number(page)) && totalPagesArray.includes(Number(page))
       ? Number(page)
-      : 0; 
+      : 0;
 
   return {
     totalPages,
-    currentPage
+    currentPage,
   };
 };
 

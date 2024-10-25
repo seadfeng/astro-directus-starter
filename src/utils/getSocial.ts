@@ -1,10 +1,18 @@
- import { socials, Socials, type Profiles, type Social } from "lib/directus";
+import { socials, Socials, type Profiles, type Social } from "lib/directus";
 import type { SocialObjects } from "types";
 
-export const getSocial = ({social, name, site_name}: {social: Social; name: string; site_name: string; }): SocialObjects[number] => {
+export const getSocial = ({
+  social,
+  name,
+  site_name,
+}: {
+  social: Social;
+  name: string;
+  site_name: string;
+}): SocialObjects[number] => {
   const social_name = Socials[social] as SocialObjects[number]["name"];
   let social_url = "";
-  switch(social) {
+  switch (social) {
     case "github":
       social_url = `https://www.github.com/${name}`;
       break;
@@ -71,15 +79,24 @@ export const getSocial = ({social, name, site_name}: {social: Social; name: stri
 
   return {
     name: social_name,
-    linkTitle: `${social === "mail" ? `Send an email to ${site_name}` : `${site_name} on ${social_name}` }`,
-    href: social_url
-  }
-} 
+    linkTitle: `${social === "mail" ? `Send an email to ${site_name}` : `${site_name} on ${social_name}`}`,
+    href: social_url,
+  };
+};
 
-export const getSocialObjects = ({profile, site_name}:{ profile: Profiles, site_name: string;}): SocialObjects =>{
+export const getSocialObjects = ({
+  profile,
+  site_name,
+}: {
+  profile: Profiles;
+  site_name: string;
+}): SocialObjects => {
   const socialObjects: SocialObjects = [];
-  socials.forEach(social =>{
-    if(profile[social]) socialObjects.push(getSocial({social, site_name: site_name, name: profile[social]}));
-  })
+  socials.forEach(social => {
+    if (profile[social])
+      socialObjects.push(
+        getSocial({ social, site_name: site_name, name: profile[social] })
+      );
+  });
   return socialObjects;
-}
+};

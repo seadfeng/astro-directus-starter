@@ -1,11 +1,11 @@
-import type { APIRoute } from "astro";  
+import type { APIRoute } from "astro";
 import { SITE } from "@config";
 import getTotalCount from "@utils/getTotalCount";
 
-export const GET: APIRoute = async () => { 
+export const GET: APIRoute = async () => {
   const totalPosts = await getTotalCount("posts");
 
-  const totalSitemaps = Math.ceil(totalPosts / SITE.postPerSitemap); 
+  const totalSitemaps = Math.ceil(totalPosts / SITE.postPerSitemap);
 
   const sitemapItems = Array.from({ length: totalSitemaps }, (_, i) => {
     const pageNum = i + 1;
@@ -27,8 +27,7 @@ export const GET: APIRoute = async () => {
   return new Response(sitemapIndex, {
     status: 200,
     headers: {
-      "Content-Type": "application/xml"
+      "Content-Type": "application/xml",
     },
   });
-
-}
+};

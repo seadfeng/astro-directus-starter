@@ -1,4 +1,4 @@
---- 
+---
 import { siteConfig } from "@utils/getConfig";
 import { getSocialObjects } from "@utils/getSocial";
 import LinkButton from "./LinkButton.astro";
@@ -12,9 +12,9 @@ export interface Props {
 
 const { centered = false } = Astro.props;
 const site = await siteConfig();
-const { profile } = site as  { profile: Profiles};
+const { profile } = site as { profile: Profiles };
 
-const socialObjects = getSocialObjects({profile, site_name: site.site_name});
+const socialObjects = getSocialObjects({ profile, site_name: site.site_name });
 ---
 
 <div class={`social-icons ${centered ? "flex" : ""}`}>

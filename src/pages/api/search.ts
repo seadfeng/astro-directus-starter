@@ -1,14 +1,14 @@
 import { SITE } from "@config";
 import { readItems } from "@directus/sdk";
-import type { APIRoute } from "astro"; 
+import type { APIRoute } from "astro";
 import directus, { type PostStatus } from "lib/directus";
 export const runtime = "edge";
- 
-export const GET: APIRoute = async ({ request }) => { 
-  const { url } = request; 
+
+export const GET: APIRoute = async ({ request }) => {
+  const { url } = request;
   const newUrl = new URL(url);
   const q = newUrl.searchParams.get("q");
-  if(!q) {
+  if (!q) {
     return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
       status: 405,
       headers: { "Content-Type": "application/json" },
@@ -20,9 +20,9 @@ export const GET: APIRoute = async ({ request }) => {
       limit: SITE.postPerPage,
       filter: {
         title: { _icontains: q },
-        status: { _eq: "published" as PostStatus }
+        status: { _eq: "published" as PostStatus },
       },
-      sort: ['views',"-date_published"],
+      sort: ["views", "-date_published"],
     })
   );
   return new Response(JSON.stringify(posts), {

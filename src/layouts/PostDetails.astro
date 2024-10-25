@@ -19,21 +19,19 @@ const { post } = Astro.props;
 
 const {
   title,
-  cover, 
-  content, 
+  cover,
+  content,
   date_published,
   date_updated,
   date_created,
   user_created,
   user_updated,
   tags,
-} = post;  
+} = post;
 
-const description = stripHtmlTags(content).slice(0, SITE.postTruncateLength).trim() + "...";
-const ogUrl = new URL(
-  `/posts/${slugifyStr(title)}.png`,
-  Astro.url.origin
-).href;
+const description =
+  stripHtmlTags(content).slice(0, SITE.postTruncateLength).trim() + "...";
+const ogUrl = new URL(`/posts/${slugifyStr(title)}.png`, Astro.url.origin).href;
 const getProps = await layoutProps();
 const configProps = {
   ...getProps,
@@ -65,13 +63,21 @@ const configProps = {
   </div>
   <main id="main-content">
     <h1 transition:name={slugifyStr(title)} class="post-title">{title}</h1>
-    {date_published && <Datetime
-      date_published={date_published}
-      date_updated={date_updated}
-      size="lg"
-      className="my-2"
-    />}
-    <article id="article" class="prose mx-auto mt-8 max-w-3xl" set:html={content}></article>
+    {
+      date_published && (
+        <Datetime
+          date_published={date_published}
+          date_updated={date_updated}
+          size="lg"
+          className="my-2"
+        />
+      )
+    }
+    <article
+      id="article"
+      class="prose mx-auto mt-8 max-w-3xl"
+      set:html={content}
+    />
     <ul class="my-8">
       {tags.map(tag => <Tag {tag} />)}
     </ul>

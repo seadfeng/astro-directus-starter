@@ -1,11 +1,11 @@
 import { SITE } from "@config";
 import { readItems } from "@directus/sdk";
-import type { APIRoute } from "astro"; 
+import type { APIRoute } from "astro";
 import directus, { type Posts } from "lib/directus";
 
-export const GET: APIRoute = async ({ params }) => { 
-  const { slug } = params as { slug: string};   
-  let collection: Posts[] = []; 
+export const GET: APIRoute = async ({ params }) => {
+  const { slug } = params as { slug: string };
+  let collection: Posts[] = [];
 
   // Check if slug is a number to determine pagination or filtering by slug
   if (!isNaN(Number(slug))) {
@@ -18,11 +18,11 @@ export const GET: APIRoute = async ({ params }) => {
     );
   } else {
     collection = await directus.request(
-      readItems("posts", { 
+      readItems("posts", {
         filter: {
-          slug: { _eq: slug }
+          slug: { _eq: slug },
         },
-        limit: 1
+        limit: 1,
       })
     );
   }

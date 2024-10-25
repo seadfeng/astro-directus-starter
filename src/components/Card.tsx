@@ -1,5 +1,5 @@
 import { slugifyStr } from "@utils/slugify";
-import Datetime from "./Datetime"; 
+import Datetime from "./Datetime";
 import type { Posts } from "lib/directus";
 import { stripHtmlTags } from "@utils/htmlUtils";
 import { SITE } from "@config";
@@ -13,9 +13,12 @@ export interface Props {
 
 export default function Card({ href, frontmatter, secHeading = true }: Props) {
   const { title, date_published, date_updated, content } = frontmatter;
-  const decodedContent = he.decode(content); 
-  let description = stripHtmlTags(decodedContent).slice(0, SITE.postTruncateLength);
-  if(description.length >= SITE.postTruncateLength) description += "...";
+  const decodedContent = he.decode(content);
+  let description = stripHtmlTags(decodedContent).slice(
+    0,
+    SITE.postTruncateLength
+  );
+  if (description.length >= SITE.postTruncateLength) description += "...";
   const headerProps = {
     style: { viewTransitionName: slugifyStr(title) },
     className: "text-lg font-medium decoration-dashed hover:underline",

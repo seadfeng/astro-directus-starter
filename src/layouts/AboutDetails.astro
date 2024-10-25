@@ -1,13 +1,13 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro"; 
+import Footer from "@components/Footer.astro";
 import Datetime from "@components/Datetime";
 import { slugifyStr, canonicalURL } from "@utils/slugify";
 import { stripHtmlTags } from "@utils/htmlUtils";
 import ShareLinks from "@components/ShareLinks.astro";
 import { SITE } from "@config";
-import { type AboutUs , type Config } from "lib/directus";
+import { type AboutUs, type Config } from "lib/directus";
 import { layoutProps } from "@utils/getConfig";
 
 export interface Props {
@@ -16,17 +16,11 @@ export interface Props {
 
 const { about } = Astro.props;
 
-const {
-  title, 
-  content,  
-  date_updated 
-} = about;  
+const { title, content, date_updated } = about;
 
-const description = stripHtmlTags(content).slice(0, SITE.postTruncateLength).trim() + "...";
-const ogUrl = new URL(
-  `/posts/${slugifyStr(title)}.png`,
-  Astro.url.origin
-).href;
+const description =
+  stripHtmlTags(content).slice(0, SITE.postTruncateLength).trim() + "...";
+const ogUrl = new URL(`/posts/${slugifyStr(title)}.png`, Astro.url.origin).href;
 const getProps = await layoutProps();
 const configProps = {
   ...getProps,
@@ -42,7 +36,7 @@ const configProps = {
 ---
 
 <Layout {...configProps}>
-  <Header siteConfig={configProps.site_config as Config}  />
+  <Header siteConfig={configProps.site_config as Config} />
 
   <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
     <button
@@ -58,13 +52,17 @@ const configProps = {
   </div>
   <main id="main-content">
     <h1 transition:name={slugifyStr(title)} class="post-title">{title}</h1>
-     <Datetime
+    <Datetime
       date_published={date_updated}
       date_updated={date_updated}
       size="lg"
       className="my-2"
     />
-    <article id="article" class="prose mx-auto mt-8 max-w-3xl" set:html={content}></article> 
+    <article
+      id="article"
+      class="prose mx-auto mt-8 max-w-3xl"
+      set:html={content}
+    />
     <div
       class="flex flex-col-reverse items-center justify-between gap-6 sm:flex-row-reverse sm:items-end sm:gap-4"
     >

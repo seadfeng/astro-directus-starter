@@ -16,7 +16,7 @@ export type Site = {
 
 export type SocialObjects = {
   name: keyof typeof socialIcons;
-  href: string; 
+  href: string;
   linkTitle: string;
 }[];
 

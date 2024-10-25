@@ -1,4 +1,4 @@
---- 
+---
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
 import Header from "@components/Header.astro";
@@ -21,7 +21,7 @@ const config = await layoutProps();
 ---
 
 <Layout {...config} title={`Tag: ${tagName} | ${config.site_name}`}>
-  <Header activeNav="tags" siteConfig={config.site_config as Config}  />
+  <Header activeNav="tags" siteConfig={config.site_config as Config} />
   <Main
     pageTitle={[`Tag:`, `${tagName}`]}
     titleTransition={tag}
@@ -30,7 +30,7 @@ const config = await layoutProps();
     <h1 slot="title" transition:name={tag}>{`Tag:${tag}`}</h1>
     <ul>
       {
-        collection.map((post) => (
+        collection.map(post => (
           <Card href={`/posts/${post.slug}/`} frontmatter={post} />
         ))
       }

@@ -23,10 +23,10 @@ export default defineConfig({
     // 转发 DIRECTUS_URL 地址
     server: {
       proxy: {
-        '/assets': {
+        "/assets": {
           target: `${import.meta.env.VITE_DIRECTUS_URL}/assets`,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/assets/, '')
+          rewrite: path => path.replace(/^\/assets/, ""),
         },
       },
     },

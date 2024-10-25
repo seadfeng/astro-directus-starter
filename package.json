@@ -1,7 +1,7 @@
 {
   "name": "astro-directus-starter.com",
   "version": "4.4.0",
-  "scripts": { 
+  "scripts": {
     "start:frontend": "astro dev",
     "build": "astro check && astro build",
     "preview:frontend": "astro preview",
@@ -12,12 +12,12 @@
     "lint": "eslint .",
     "deploy": "npm run build && wrangler pages deploy dist",
     "prepare": "husky install",
-    "develop:backend": "cd backend && docker compose up", 
+    "develop:backend": "cd backend && docker compose up",
     "develop:frontend": "astro dev",
     "develop": "cross-env FORCE_COLOR=1 npm-run-all -l -p develop:*",
-    "start:backend": "cd backend && docker compose up",  
+    "start:backend": "cd backend && docker compose up",
     "start": "cross-env FORCE_COLOR=1 npm-run-all -l -p start:*",
-    "preview:backend": "cd backend && docker compose up",  
+    "preview:backend": "cd backend && docker compose up",
     "preview": "cross-env FORCE_COLOR=1 npm-run-all -l -p preview:*"
   },
   "dependencies": {

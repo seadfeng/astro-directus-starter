@@ -1,7 +1,7 @@
-import { createDirectus, rest, staticToken, } from '@directus/sdk';
+import { createDirectus, rest, staticToken } from "@directus/sdk";
 
 export type AboutUs = {
-  content: string ;
+  content: string;
   date_updated: string;
   id: number;
   meta_description?: string | null;
@@ -441,7 +441,7 @@ export type DirectusWebhooks = {
 
 export type Posts = {
   content: string;
-  cover?: string |DirectusFiles | null;
+  cover?: string | DirectusFiles | null;
   date_created: string;
   date_published: string;
   date_updated: string;
@@ -455,7 +455,7 @@ export type Posts = {
   tag_ids: any[] | PostsTags[];
   title: string;
   user_created?: Readonly<string | DirectusUsers>;
-  user_updated?:  Readonly<string | DirectusUsers>;
+  user_updated?: Readonly<string | DirectusUsers>;
   views: number;
 };
 
@@ -485,9 +485,9 @@ export const socials = [
   "twitter",
   "discord",
   "whatsapp",
-  "codepen"
+  "codepen",
 ] as const;
-export type Social = typeof socials[number];
+export type Social = (typeof socials)[number];
 
 export const Socials: Record<Social, string> = {
   youtube: "YouTube",
@@ -509,9 +509,8 @@ export const Socials: Record<Social, string> = {
   twitter: "Twitter",
   discord: "Discord",
   whatsapp: "WhatsApp",
-  codepen: "CodePen"
-}
-
+  codepen: "CodePen",
+};
 
 export type Profiles = {
   codepen?: string | null;
@@ -622,17 +621,21 @@ export type Schema = {
   routings: Routings[];
   static_pages: StaticPages[];
   tags: Tags[];
-};  
+};
 
 const postStatus = ["published", "draft", "archived"] as const;
-export type PostStatus = typeof postStatus[number] ;
+export type PostStatus = (typeof postStatus)[number];
 
 export type PostDetail = Posts & {
-  tags: string[]
-}
+  tags: string[];
+};
 const VITE_DIRECTUS_URL: string = import.meta.env.VITE_DIRECTUS_URL;
 
-const directus = createDirectus<Schema>(VITE_DIRECTUS_URL).with(rest({
-  onRequest: (options) => ({ ...options, cache: "no-store" }),
-})).with(staticToken(import.meta.env.VITE_DIRECTUS_ADMIN_TOKEN));  
+const directus = createDirectus<Schema>(VITE_DIRECTUS_URL)
+  .with(
+    rest({
+      onRequest: options => ({ ...options, cache: "no-store" }),
+    })
+  )
+  .with(staticToken(import.meta.env.VITE_DIRECTUS_ADMIN_TOKEN));
 export default directus;

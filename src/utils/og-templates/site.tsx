@@ -1,4 +1,4 @@
-import satori from "satori"; 
+import satori from "satori";
 import loadGoogleFonts, { type FontOptions } from "../loadGoogleFont";
 import { siteConfig } from "@utils/getConfig";
 
@@ -66,7 +66,9 @@ export default async () => {
               textAlign: "center",
             }}
           >
-            <p style={{ fontSize: 72, fontWeight: "bold" }}>{config.meta_title!}</p>
+            <p style={{ fontSize: 72, fontWeight: "bold" }}>
+              {config.meta_title!}
+            </p>
             <p style={{ fontSize: 28 }}>{config.meta_description!}</p>
           </div>
 
@@ -90,7 +92,9 @@ export default async () => {
       width: 1200,
       height: 630,
       embedFont: true,
-      fonts: (await loadGoogleFonts(config.meta_title! + config.meta_description!)) as FontOptions[],
+      fonts: (await loadGoogleFonts(
+        config.meta_title! + config.meta_description!
+      )) as FontOptions[],
     }
   );
 };

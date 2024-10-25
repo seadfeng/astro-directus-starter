@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import Card from "@components/Card"; 
+import Card from "@components/Card";
 import type { Posts } from "lib/directus";
 import { stripHtmlTags } from "@utils/htmlUtils";
 import { SITE } from "@config";
@@ -42,24 +42,31 @@ export default function SearchBar({ initialSearchList }: Props) {
       if (inputVal.length > 1) {
         setIsLoading(true);
         try {
-          const response = await fetch(`/api/search?q=${encodeURIComponent(inputVal)}`);
+          const response = await fetch(
+            `/api/search?q=${encodeURIComponent(inputVal)}`
+          );
           if (!response.ok) {
-            throw new Error('Failed to fetch search results');
+            throw new Error("Failed to fetch search results");
           }
           const posts: Posts[] = await response.json();
-          const searchList = posts.map((post) =>{ 
-            const decodedContent = he.decode(post.content); 
-            let description = stripHtmlTags(decodedContent).slice(0, SITE.postTruncateLength);
-            if(description.length >= SITE.postTruncateLength) description += "...";
+          const searchList = posts.map(post => {
+            const decodedContent = he.decode(post.content);
+            let description = stripHtmlTags(decodedContent).slice(
+              0,
+              SITE.postTruncateLength
+            );
+            if (description.length >= SITE.postTruncateLength)
+              description += "...";
             return {
               title: post.title,
               description,
               data: post,
               slug: post.slug,
-          }});
+            };
+          });
           setSearchList(searchList);
         } catch (error) {
-          console.error('Error fetching search results:', error);
+          console.error("Error fetching search results:", error);
         } finally {
           setIsLoading(false);
         }
@@ -70,7 +77,8 @@ export default function SearchBar({ initialSearchList }: Props) {
       const searchParams = new URLSearchParams(window.location.search);
       if (inputVal.length > 0) {
         searchParams.set("q", inputVal);
-        const newRelativePathQuery = window.location.pathname + "?" + searchParams.toString();
+        const newRelativePathQuery =
+          window.location.pathname + "?" + searchParams.toString();
         history.replaceState(history.state, "", newRelativePathQuery);
       } else {
         history.replaceState(history.state, "", window.location.pathname);
@@ -113,7 +121,7 @@ export default function SearchBar({ initialSearchList }: Props) {
       )}
 
       <ul>
-        {searchList.map((item) => (
+        {searchList.map(item => (
           <Card
             href={`/posts/${item.slug}/`}
             frontmatter={item.data}

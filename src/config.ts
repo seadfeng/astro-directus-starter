@@ -8,10 +8,10 @@ export const SITE: Site = {
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerIndex: 4,
-  postPerPage: 3, 
+  postPerPage: 3,
   postTruncateLength: 280, // For posts index
   postPerSitemap: 1000,
-  tagPerPage: 50
+  tagPerPage: 50,
 };
 
 export const LOCALE = {
@@ -25,4 +25,3 @@ export const LOGO_IMAGE = {
   width: 216,
   height: 46,
 };
-

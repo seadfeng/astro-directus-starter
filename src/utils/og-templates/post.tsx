@@ -1,4 +1,4 @@
-import satori from "satori"; 
+import satori from "satori";
 import { SITE } from "@config";
 import loadGoogleFonts, { type FontOptions } from "../loadGoogleFont";
 import type { DirectusUsers, Posts } from "lib/directus";
@@ -7,10 +7,10 @@ import { siteConfig } from "@utils/getConfig";
 export default async (post: Posts) => {
   const config = await siteConfig();
   const user_created = post.user_created as DirectusUsers;
-  let author =  config.site_name;
-  if(user_created.last_name){
-    author = user_created.last_name; 
-    if(user_created.first_name)  author += ` ${user_created.first_name}`; 
+  let author = config.site_name;
+  if (user_created.last_name) {
+    author = user_created.last_name;
+    if (user_created.first_name) author += ` ${user_created.first_name}`;
   }
 
   return satori(

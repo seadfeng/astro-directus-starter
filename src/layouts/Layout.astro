@@ -1,8 +1,8 @@
 ---
-import { LOCALE, SITE } from "@config"; 
-import "@styles/base.css"; 
-import { ViewTransitions } from "astro:transitions"; 
-import type { LayoutProps } from "@utils/getConfig"; 
+import { LOCALE, SITE } from "@config";
+import "@styles/base.css";
+import { ViewTransitions } from "astro:transitions";
+import type { LayoutProps } from "@utils/getConfig";
 
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
@@ -10,12 +10,12 @@ type Props = LayoutProps;
 
 const {
   title,
-  author, 
+  author,
   profile_url,
   description,
   ogImage,
   favicon,
-  canonicalURL = new URL(Astro.url.pathname, Astro.site).href, 
+  canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
   date_published,
   date_updated,
   scrollSmooth = false,
@@ -51,7 +51,13 @@ const structuredData = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    { !favicon.includes("svg") ? <link rel="icon" href={favicon} /> : <link rel="icon" type="image/svg+xml" href="/favicon.svg" />}
+    {
+      !favicon.includes("svg") ? (
+        <link rel="icon" href={favicon} />
+      ) : (
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      )
+    }
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
 

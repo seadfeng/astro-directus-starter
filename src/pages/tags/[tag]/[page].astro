@@ -1,63 +1,64 @@
---- 
+---
 import { SITE } from "@config";
 import { aggregate, readItems } from "@directus/sdk";
-import TagPosts from "@layouts/TagPosts.astro";  
+import TagPosts from "@layouts/TagPosts.astro";
 import getPagination from "@utils/getPagination";
 import directus, { type Posts, type PostStatus } from "lib/directus";
- 
-const { tag, page } = Astro.params as { tag: string; page: string;}; 
+
+const { tag, page } = Astro.params as { tag: string; page: string };
 
 const tagName = tag;
 const tagItems = await directus.request(
   readItems("tags", {
-    filter:{
-      name: { _eq: tag }
+    filter: {
+      name: { _eq: tag },
     },
-    limit: 1
-  }) 
+    limit: 1,
+  })
 );
 
-if(tagItems.length === 0) return;
+if (tagItems.length === 0) return;
 const item = tagItems[0];
 
 const postsTagsTotalCount = await directus.request(
   aggregate("posts_tags", {
-    query:{
-      filter:{
+    query: {
+      filter: {
         posts_id: { status: { _eq: "published" as PostStatus } },
-        tags_id: { _eq: item.id }
-      }
+        tags_id: { _eq: item.id },
+      },
     },
     aggregate: { count: "*" },
   })
 );
-const totalCount = postsTagsTotalCount[0].count ? parseInt(postsTagsTotalCount[0].count, 10) : 0 ;
+const totalCount = postsTagsTotalCount[0].count
+  ? parseInt(postsTagsTotalCount[0].count, 10)
+  : 0;
 
-const posts_tags:{
-  posts_id: Posts
-}[] =  await directus.request(
+const posts_tags: {
+  posts_id: Posts;
+}[] = (await directus.request(
   readItems("posts_tags", {
-    fields:[
+    fields: [
       // @ts-expect-error: Suppressing type error for demonstration purposes
-      "posts_id.*"
+      "posts_id.*",
     ],
-    filter:{
+    filter: {
       tags_id: { _eq: item.id },
-      posts_id: { status: { _eq: "published" as PostStatus } }
+      posts_id: { status: { _eq: "published" as PostStatus } },
     },
     // @ts-expect-error: Suppressing type error for demonstration purposes
     sort: ["-posts_id.date_published"],
     page: parseInt(page, 10),
-    limit: SITE.postPerPage
-  }) 
-) as any[] ;
-const collection = posts_tags.map(item =>item.posts_id);
+    limit: SITE.postPerPage,
+  })
+)) as any[];
+const collection = posts_tags.map(item => item.posts_id);
 
 const pagination = getPagination({
   totalCount,
-  page: page, 
+  page: page,
 });
- 
 ---
 
 <TagPosts {collection} {...pagination} {tag} {tagName} />

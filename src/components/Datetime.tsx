@@ -47,9 +47,14 @@ export default function Datetime({
   );
 }
 
-const FormattedDatetime = ({ date_published, date_updated }: DatetimesProps) => {
+const FormattedDatetime = ({
+  date_published,
+  date_updated,
+}: DatetimesProps) => {
   const myDatetime = new Date(
-    date_updated && date_updated > date_published ? date_updated : date_published
+    date_updated && date_updated > date_published
+      ? date_updated
+      : date_published
   );
 
   const date = myDatetime.toLocaleDateString(LOCALE.langTag, {
