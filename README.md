@@ -13,6 +13,7 @@ git clone https://github.com/seadfeng/headless-directus-starter.git && mv headle
 source .bashrc
 
 # dev
+mv .env.example .env
 pnpm develop
 
 ```
