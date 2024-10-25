@@ -17,6 +17,6 @@ pnpm develop
 
 ```
 
-## 部署
+## Dependencies
 
-[backend/.env](backend/.env)
+- [headless-directus-starter](https://github.com/seadfeng/headless-directus-starter.git)
