@@ -1,0 +1,111 @@
+---
+import Footer from "@components/Footer.astro";
+import Header from "@components/Header.astro";
+import Pagination from "@components/Pagination.astro";
+import Tag from "@components/Tag.astro";
+import { SITE } from "@config";
+import { aggregate, readItems } from "@directus/sdk";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import TagPosts from "@layouts/TagPosts.astro"; 
+import { layoutProps } from "@utils/getConfig";
+import getPagination from "@utils/getPagination";   
+import getTotalCount from "@utils/getTotalCount";
+import directus, { type Posts, type PostStatus, type Tags, type Config } from "lib/directus";
+const { tag } = Astro.params as { tag: string}; 
+const tagName = tag;
+let tags: Tags[] = [];
+let totalCount: number;
+let pagination: {
+  currentPage: number; 
+  totalPages: number;
+}
+let collection: Tags[] | Posts[] = [];
+ 
+if(isNaN(Number(tag))){
+  console.log("tag1",tag)
+  const tagItems = await directus.request(
+    readItems("tags", {
+      filter:{
+        name: { _eq: tag }
+      },
+      limit: 1
+    }) 
+  );
+
+  if(tagItems.length === 0) return;
+  const item = tagItems[0];
+
+  const postsTagsTotalCount = await directus.request(
+    aggregate("posts_tags", {
+      query:{
+        filter:{ 
+          posts_id: { status: { _eq: "published" as PostStatus } },
+          tags_id: { _eq: item.id }
+        }
+      },
+      aggregate: { count: "*" },
+    })
+  );
+  
+  totalCount = postsTagsTotalCount[0].count ? parseInt(postsTagsTotalCount[0].count, 10) : 0 ; 
+  const posts_tags:{
+    posts_id: Posts
+  }[] =  await directus.request(
+    readItems("posts_tags", {
+      fields:[
+        // @ts-expect-error: Suppressing type error for demonstration purposes
+        "posts_id.*"
+      ],
+      filter:{
+        tags_id: { _eq: item.id },
+        posts_id: { status: { _eq: "published" as PostStatus } }
+      },
+      // @ts-expect-error: Suppressing type error for demonstration purposes
+      sort: ["-posts_id.date_published"],
+      limit: SITE.postPerPage
+    }) 
+  ) as any[] ;
+  collection = posts_tags.map(item =>item.posts_id);
+
+  pagination = getPagination({
+    totalCount,
+    page: 1,
+    isIndex: true,
+  });
+}else{
+  console.log("tag2",tag)
+  tags = await directus.request(
+    readItems("tags", {
+      limit: SITE.tagPerPage 
+    }) 
+  );
+  const totalCount = await getTotalCount("tags");
+  pagination = getPagination({
+    totalCount,
+    page: parseInt(tag, 10)
+  });
+}
+const { currentPage, totalPages } = pagination;
+
+const config = await layoutProps();
+---
+{!isNaN(Number(tag)) ?
+  <Layout {...config} title={`Tags | ${config.site_name}`}>
+    <Header activeNav="tags" siteConfig={config.site_config as Config}  />
+    <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
+      <ul>
+        {tags.map(({ name }) => <Tag tag={name} size="lg" />)}
+      </ul>
+      <Pagination
+        {currentPage}
+        {totalPages}
+        prevUrl={`/tags${currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""}/`}
+        nextUrl={`/tags/${currentPage + 1}/`}
+      />
+    </Main>
+    <Footer />
+  </Layout>
+  : <TagPosts collection={collection as Posts[]} {...pagination} {tag} {tagName} />
+}
+

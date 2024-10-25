@@ -1,0 +1,50 @@
+--- 
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Card from "@components/Card";
+import Pagination from "@components/Pagination.astro";
+import { type Posts, type Config } from "lib/directus";
+import { layoutProps } from "@utils/getConfig";
+
+export interface Props {
+  currentPage: number;
+  totalPages: number;
+  collection: Posts[];
+  tag: string;
+  tagName: string;
+}
+
+const { currentPage, totalPages, collection, tag, tagName } = Astro.props;
+const config = await layoutProps();
+---
+
+<Layout {...config} title={`Tag: ${tagName} | ${config.site_name}`}>
+  <Header activeNav="tags" siteConfig={config.site_config as Config}  />
+  <Main
+    pageTitle={[`Tag:`, `${tagName}`]}
+    titleTransition={tag}
+    pageDesc={`All the articles with the tag "${tagName}".`}
+  >
+    <h1 slot="title" transition:name={tag}>{`Tag:${tag}`}</h1>
+    <ul>
+      {
+        collection.map((post) => (
+          <Card href={`/posts/${post.slug}/`} frontmatter={post} />
+        ))
+      }
+    </ul>
+  </Main>
+
+  <Pagination
+    {currentPage}
+    {totalPages}
+    prevUrl={`/tags/${tag}${
+      currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""
+    }/`}
+    nextUrl={`/tags/${tag}/${currentPage + 1}/`}
+  />
+
+  <Footer noMarginTop={totalPages > 1} />
+</Layout>

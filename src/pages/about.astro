@@ -1,0 +1,18 @@
+---   
+import type { AboutUs } from "lib/directus";
+import { readItem } from "@directus/sdk";
+import directus from "lib/directus"; 
+import AboutDetails from "@layouts/AboutDetails.astro"; 
+
+const about = await directus.request(
+    // @ts-expect-error: Suppressing type error for demonstration purposes
+    readItem("about_us", 1, {
+      fields:[
+        "*",
+        {
+          "team": [ "*" ]
+        }
+      ]
+    })) as AboutUs
+---
+<AboutDetails about={about} /> 

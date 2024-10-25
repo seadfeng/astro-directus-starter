@@ -1,0 +1,45 @@
+--- 
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Tag from "@components/Tag.astro"; 
+import { SITE } from "@config"; 
+import directus, { type Config } from "lib/directus";
+import { readItems } from "@directus/sdk";
+import getPagination from "@utils/getPagination";
+import getTotalCount from "@utils/getTotalCount";
+import Pagination from "@components/Pagination.astro";
+import { layoutProps } from "@utils/getConfig";
+
+const tags = await directus.request(
+  readItems("tags", {
+    limit: SITE.tagPerPage 
+  }) 
+);
+
+const totalCount = await getTotalCount("tags");
+const pagination = getPagination({
+  totalCount,
+  page: 1,
+  isIndex: true,
+});
+const { currentPage, totalPages } = pagination;
+const config = await layoutProps();
+---
+
+<Layout {...config} title={`Tags | ${config.site_name}`}>
+  <Header activeNav="tags" siteConfig={config.site_config as Config} />
+  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
+    <ul>
+      {tags.map(({ name }) => <Tag tag={name} size="lg" />)}
+    </ul>
+    <Pagination
+      {currentPage}
+      {totalPages}
+      prevUrl={`/tags${currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""}/`}
+      nextUrl={`/tags/${currentPage + 1}/`}
+    />
+  </Main>
+  <Footer />
+</Layout>

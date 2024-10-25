@@ -1,0 +1,41 @@
+--- 
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Pagination from "@components/Pagination.astro";
+import Card from "@components/Card"; 
+import { type Posts, type Config  } from "lib/directus";
+import type { LayoutProps } from "@utils/getConfig";
+
+export interface Props {
+  currentPage: number;
+  totalPages: number;
+  layoutProps: LayoutProps;
+  collection: Posts[];
+}
+
+const { currentPage, totalPages, collection, layoutProps } = Astro.props; 
+---
+
+<Layout {...layoutProps} title={`Posts | ${layoutProps.site_name}`}>
+  <Header activeNav="posts" siteConfig={layoutProps.site_config as Config}  />
+  <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
+    <ul>
+      {
+        collection.map((item) => (
+          <Card href={`/posts/${item.slug}/`} frontmatter={item} />
+        ))
+      }
+    </ul>
+  </Main>
+
+  <Pagination
+    {currentPage}
+    {totalPages}
+    prevUrl={`/posts${currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""}/`}
+    nextUrl={`/posts/${currentPage + 1}/`}
+  />
+
+  <Footer noMarginTop={totalPages > 1} />
+</Layout>

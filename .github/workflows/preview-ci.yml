@@ -1,0 +1,69 @@
+name: Preview CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md
+      - LICENSE
+      - bin/**
+      - .vscode/**
+      - .gitignore
+
+jobs:
+  build:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: preview
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: "☁️ Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: Create Project If Not Exist
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/astro-directus-starter" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}")
+          if [ $response -eq 404 ]; then
+            echo "Project does not exist, creating..."
+            npx wrangler pages project create astro-directus-starter --production-branch main
+          else
+            echo "Project exists, skipping creation."
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: "🔧 Setup Node.js ${{ matrix.node-version }}"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: "📦 Install dependencies"
+        run: npm ci
+
+      - name: "🔎 Lint code"
+        run: npm run lint
+
+      - name: "📝 Checking code format"
+        run: npm run format:check
+
+      - name: "🚀 Build the project"
+        run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name astro-directus-starter --branch dev

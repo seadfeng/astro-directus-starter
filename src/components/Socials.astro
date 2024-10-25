@@ -1,0 +1,42 @@
+--- 
+import { siteConfig } from "@utils/getConfig";
+import { getSocialObjects } from "@utils/getSocial";
+import LinkButton from "./LinkButton.astro";
+import socialIcons from "@assets/socialIcons";
+import { type Profiles } from "lib/directus";
+import type { SocialObjects } from "types";
+
+export interface Props {
+  centered?: boolean;
+}
+
+const { centered = false } = Astro.props;
+const site = await siteConfig();
+const { profile } = site as  { profile: Profiles};
+
+const socialObjects = getSocialObjects({profile, site_name: site.site_name});
+---
+
+<div class={`social-icons ${centered ? "flex" : ""}`}>
+  {
+    socialObjects.map(social => (
+      <LinkButton
+        href={social.href}
+        className="link-button"
+        title={social.linkTitle}
+      >
+        <Fragment set:html={socialIcons[social.name]} />
+        <span class="sr-only">{social.linkTitle}</span>
+      </LinkButton>
+    ))
+  }
+</div>
+
+<style>
+  .social-icons {
+    @apply flex-wrap justify-center gap-1;
+  }
+  .link-button {
+    @apply p-2 hover:rotate-6 sm:p-1;
+  }
+</style>

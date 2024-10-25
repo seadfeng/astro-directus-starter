@@ -1,0 +1,31 @@
+--- 
+import Posts from "@layouts/Posts.astro"; 
+import getPagination from "@utils/getPagination";
+import getTotalCount from "@utils/getTotalCount";
+
+import { readItems } from "@directus/sdk";
+import directus, { type PostStatus } from "lib/directus";
+import { SITE } from "@config";
+import { layoutProps } from "@utils/getConfig";
+
+
+const collection = await directus.request(
+  readItems("posts", {
+    limit: SITE.postPerPage,
+    filter: {
+      status: { _eq: "published" as PostStatus }
+    },
+    sort: ["-date_published"],
+  })
+);
+const totalCount = await getTotalCount("posts");
+ 
+const pagination = getPagination({
+  totalCount,
+  page: 1,
+  isIndex: true,
+});
+const configProps = await layoutProps();
+---
+
+<Posts layoutProps={configProps} {...pagination } collection={collection} />
