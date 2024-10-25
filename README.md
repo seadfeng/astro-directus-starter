@@ -47,12 +47,6 @@ Regenerate Token for Workers & Pages Variables and Secrets `VITE_DIRECTUS_ADMIN_
 
 ![Repository Secrets](public/assets/repository-secrets.png)
 
-### Workers & Pages
-
-### Settings > Variables and Secrets
-
-![ Workers & Pages > Variables and Secrets](public/assets/pages-settings.png)
-
 ## Dependencies
 
 - [headless-directus-starter](https://github.com/seadfeng/headless-directus-starter.git)
