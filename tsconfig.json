@@ -14,5 +14,6 @@
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"]
     }
-  }
+  },
+  "exclude": ["node_modules", "dist", "backend"]
 }

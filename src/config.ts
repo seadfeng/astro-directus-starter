@@ -1,4 +1,4 @@
-import type { Site, SocialObjects } from "./types";
+import type { Site } from "./types";
 
 export const SITE: Site = {
   website: import.meta.env.VITE_ASTRO_URL || "https://astro-paper.pages.dev", // replace this with your deployed domain

@@ -1,16 +1,15 @@
 ---
-import { SITE } from "@config";
-import Layout from "@layouts/Layout.astro";
-import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
+import Header from "@components/Header.astro";
 import LinkButton from "@components/LinkButton.astro";
+import Layout from "@layouts/Layout.astro";
 import { layoutProps } from "@utils/getConfig";
-
+import { type Config } from "lib/directus";
 const config = await layoutProps();
 ---
 
 <Layout {...config} title={`404 Not Found | ${config.site_name}`}>
-  <Header />
+  <Header siteConfig={config.site_config as Config} />
 
   <main id="main-content">
     <div class="not-found-wrapper">
