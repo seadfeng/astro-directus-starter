@@ -20,6 +20,12 @@ pnpm develop
 
 ## Deploy
 
+### Regenerate Directus Admin Token
+
+Regenerate Token for Workers & Pages Variables and Secrets `VITE_DIRECTUS_ADMIN_TOKEN`
+
+![Directus Admin Token](public/assets/admin-token.png)
+
 ### Github Actions
 
 #### Actions secrets and variables
