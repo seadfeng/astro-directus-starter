@@ -634,7 +634,7 @@ const VITE_DIRECTUS_URL: string = import.meta.env.VITE_DIRECTUS_URL;
 const directus = createDirectus<Schema>(VITE_DIRECTUS_URL)
   .with(
     rest({
-      onRequest: options => ({ ...options, cache: "no-store" }),
+      onRequest: options => ({ ...options }),
     })
   )
   .with(staticToken(import.meta.env.VITE_DIRECTUS_ADMIN_TOKEN));
