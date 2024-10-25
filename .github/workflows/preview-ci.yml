@@ -39,12 +39,14 @@ jobs:
           else
             echo "Project exists, skipping creation."
           fi
-          npx wrangler pages project set-env-var astro-directus-starter \
-            VITE_ASTRO_URL "${{ vars.VITE_ASTRO_URL }}" \
-            VITE_ASTRO_AUTHOR "${{ vars.VITE_ASTRO_AUTHOR }}" \
-            VITE_ASTRO_PROFILE "${{ vars.VITE_ASTRO_PROFILE }}" \
-            VITE_DIRECTUS_URL "${{ vars.VITE_DIRECTUS_URL }}" \
-            VITE_DIRECTUS_ADMIN_TOKEN "${{ secrets.VITE_DIRECTUS_ADMIN_TOKEN }}"
+           npx wrangler pages deployment-config set \
+            --project-name astro-directus-starter \
+            --branch dev \
+            --env VITE_ASTRO_URL="${{ vars.VITE_ASTRO_URL }}" \
+            --env VITE_ASTRO_AUTHOR="${{ vars.VITE_ASTRO_AUTHOR }}" \
+            --env VITE_ASTRO_PROFILE="${{ vars.VITE_ASTRO_PROFILE }}" \
+            --env VITE_DIRECTUS_URL="${{ vars.VITE_DIRECTUS_URL }}" \
+            --env VITE_DIRECTUS_ADMIN_TOKEN="${{ secrets.VITE_DIRECTUS_ADMIN_TOKEN }}"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
