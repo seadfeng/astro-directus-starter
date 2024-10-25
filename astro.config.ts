@@ -17,6 +17,7 @@ export default defineConfig({
     },
   }),
   vite: {
+    envPrefix: "VITE_",
     optimizeDeps: {
       exclude: ["@resvg/resvg-js"],
     },
